@@ -33,37 +33,3 @@ rhenth(:,2)=XSteam('h_pT',rhp,rht(:,2));
 rhent=XSteam('s_pT',rhp(nrh-1,1),rht(nrh-1,2));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-% rhenth(:,3)=XSteam('h_pT',rhp(:,1),rht(:,2)); %Returns enthalpy of superheated steam
-% rhsuph=rht(:,1)>XSteam('Tsat_p',rhp(:,1)); % Ensures if the temp. before entering reheat is saturated or not
-%                                             % Returns 1 if it is
-%                                             % superheated and 0 if normal
-% rhtsuph=rht(rhsuph==1); % Seperates out the temperatures which are 
-% rhtsat=rht(rhsuph==0);
-% 
-% rhenth(:,2)=XSteam('h_pT',rhp(:,1),rhtsuph(1,:));
-% if rhsuph(:,1)==1
-%     rhenth(:,1)=XSteam('h_pT',rhp(:,1),rht(:,1));  %% Calculates the enthaply at superheated points
-% end
-% 
-% % What to do with ) Values
-% if rhsuph(:,1)==0
-%     rhent(:,1)=XSteam('s_pT',rhp(:,1),rht(:,1));
-%     rhx(:,1)=(rhent(:,1)-XSteam('sL_p',p))./(XSteam(s
-% end
-%     
-    
-
-        
-
