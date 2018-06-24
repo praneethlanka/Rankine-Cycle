@@ -1,4 +1,4 @@
-function [rhenth,rhent,nrh]=reheat()
+function [rh,nrh]=reheat()
 nrh=input('No. of reheat cycles?');
 rhp=zeros(nrh,1);
 rht=zeros(nrh,2);
@@ -14,7 +14,7 @@ rhsuph=abs(rht(:,1)-XSteam('Tsat_p',rhp(:,1)))>0.2;
 
 %If the temperature entered by the user is close to Saturation temperature
 %to a tolerance of 0.2 then it rounds it off to Saturation temperature
-rht(rht(:,1)-XSteam('Tsat_p',rhp)<0.2)=XSteam('Tsat_p',rhp(rht(:,1)-XSteam('Tsat_p',rhp)<0.2));
+rht(abs((rht(:,1)-XSteam('Tsat_p',rhp))<0.2))=XSteam('Tsat_p',abs((rhp(rht(:,1)-XSteam('Tsat_p',rhp))))<0.2);
 
 % Elementfinder returns the position of the 2nd argument of the function in
 % the 1st Argument( A matrix)
@@ -35,6 +35,13 @@ b=elementfinder(rhsuph,0);
 rhenth(b(:,1),1)=XSteam('hV_p',rhp(rhsuph==0));
 rhenth(:,2)=XSteam('h_pT',rhp,rht(:,2));
 rhent=XSteam('s_pT',rhp(nrh,1),rht(nrh,2));
+rh=cell(2,3);
+rh{1,1}='TEMPERATURE';
+rh{1,2}='ENTHALPY';
+rh{1,3}='ENTROPY';
+rh{2,1}=rht;
+rh{2,2}=rhenth;
+rh{3,3}=rhent;
 
 
 
