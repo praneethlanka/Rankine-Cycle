@@ -358,7 +358,7 @@ case 'p_hs'
     %*1.4 Enthalpy (h)
 case 'hv_p'
     p = toSIunit_p(In1);
-    if p > 0.000611657 && p < 22.06395 
+    if p > 0.000611657 & p < 22.06395 
         Out = fromSIunit_h(h4V_p(p));
     else
         Out = NaN;
