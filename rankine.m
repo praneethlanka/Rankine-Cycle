@@ -1,5 +1,5 @@
 a=input('What all addons are there in the Cyclen\n1. Reheat\n2. Regenerative\n3. Both\n4. None\n');
-rankp=xlsread('xlsreadtest.xlsx','Rankine','d1:e1')';
+rankp=xlsread('rankinecycle.xlsx','Rankine','d1:e1')';
 boil=boiler(rankp);
 if a==1
     [rh,nrh,rhdry]=reheat(boil);
@@ -34,7 +34,7 @@ if a==1
     eff=(twork-pwork)/(heat{2,1}+heat{2,2});
     heatin=heat{2,1}+heat{2,2};
 end
-xlswrite('xlsreadtest.xlsx',twork,'OUTPUT','C2');
-xlswrite('xlsreadtest.xlsx',pwork,'OUTPUT','E2');
-xlswrite('xlsreadtest.xlsx',heatin,'OUTPUT','C5');
-xlswrite('xlsreadtest.xlsx',eff,'OUTPUT','C8');
+xlswrite('rankinecycle.xlsx',twork,'OUTPUT','C2');
+xlswrite('rankinecycle.xlsx',pwork,'OUTPUT','E2');
+xlswrite('rankinecycle.xlsx',heatin,'OUTPUT','C5');
+xlswrite('rankinecycle.xlsx',eff,'OUTPUT','C8');

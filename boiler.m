@@ -3,7 +3,7 @@ boil=cell(2,3);
 boil{1,1}='TEMPERATURE';
 boil{1,2}='ENTHALPY';
 boil{1,3}='ENTROPY';
-boil{2,1}=xlsread('xlsreadtest.xlsx','Rankine','d4:e4');
+boil{2,1}=xlsread('rankinecycle.xlsx','Rankine','d4:e4');
 boil{2,2}(1,1)=XSteam('h_pT',rankp(2,1),boil{2,1}(1,1));
 boil{2,3}(1,1)=XSteam('s_pT',rankp(2,1),boil{2,1}(1,1));
 if abs(boil{2,1}(1,2)-XSteam('Tsat_p',rankp(2,1)))<0.2  % Saturated State

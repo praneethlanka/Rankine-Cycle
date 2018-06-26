@@ -1,7 +1,7 @@
 function [rh,nrh,rhdry]=reheat(boil)
-nrh=xlsread('xlsreadtest.xlsx','Rankine','d8');
-rhp=xlsread('xlsreadtest.xlsx','Reheat(Pressure Drops)')';
-rht=xlsread('xlsreadtest.xlsx','Reheat(Temperatures)'); % The reheat entry point is dictated by the boiler 
+nrh=xlsread('rankinecycle.xlsx','Rankine','d8');
+rhp=xlsread('rankinecycle.xlsx','Reheat(Pressure Drops)')';
+rht=xlsread('rankinecycle.xlsx','Reheat(Temperatures)'); % The reheat entry point is dictated by the boiler 
 rhent=zeros(nrh,2);                                     %pressure and 100% isentropic efficiency of turbines
 rhent(:,2)=XSteam('s_pt',rhp,rht(:,2));
 rhent(1,1)=boil{2,3}(1,2);
