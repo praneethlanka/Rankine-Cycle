@@ -1,35 +1,31 @@
-function [rhenth,rhent]=reheat()
-nrh=input('No. of reheat cycles?');
-rhp=zeros(nrh,1);
-rht=zeros(nrh,2);
+function [rh,nrh,rhdry]=reheat(boil)
+nrh=xlsread('xlsreadtest.xlsx','Rankine','d8');
+rhp=xlsread('xlsreadtest.xlsx','Reheat(Pressure Drops)')';
+rht=xlsread('xlsreadtest.xlsx','Reheat(Temperatures)'); % The reheat entry point is dictated by the boiler 
+rhent=zeros(nrh,2);                                     %pressure and 100% isentropic efficiency of turbines
+rhent(:,2)=XSteam('s_pt',rhp,rht(:,2));
+rhent(1,1)=boil{2,3}(1,2);
+rhent(2:end,1)=rhent(1:end-1,2); %The entropies at the reheat entry points are calculated assuming
+                                 %100% isentropic efficiencies
+rhent1=rhent(:,1);   % THe entropy of the steam at each entry point is extracted 
 rhenth=zeros(nrh,2);
-for i=1:nrh
-    rhp(i,1)=input('Enter pressure to which each cycle drops');        
-    rht(i,1)=input('ENter the tmeperature before entering the reheat');
-    rht(i,2)=input('\nEnter the temp. after entering the reheat''s boiler at each cycle');
-end
-%Next line checks for superheated temperatures at the reheat's inlet and
-%returns 1 if it is superheated and 0 if steam is either dry saturated or in wet state. 
-rhsuph=abs(rht(:,1)-XSteam('Tsat_p',rhp(:,1)))>0.2;
-%If the temperature entered by the user is close to Saturation temperature
-%to a tolerance of 0.2 then it rounds it off to Saturation temperature
-rht(rht-XSteam('Tsat_p',rhp)<0.2)=XSteam('Tsat_p',rhp(rht-XSteam('Tsat_p',rhp)<0.2));
-% Elementfinder returns the position of the 2nd argument of the function in
-% the 1st Argument( A matrix)
-%This line returns at what inlet is the steam is in superheated state.
-%Initially the user does not know where the steam is superheated
-a=elementfinder(rhsuph,1);
-%The enthalpy's at the superheated states(if any) are calculated in this
-%line. Matrix indexing is done in such a way that the pressure and
-%temperature inputs are in correspondence with the superheated states.
-rhenthsup=XSteam('h_pT',rhp(rhsuph==1),rht(rhsuph==1));
-% Finally the enthalpies of all the states are added into suitable
-% post=itions of the rhenth matrix with the help of output from the
-% variable a
-rhenth(a(:,1),1)=rhenthsup(:,1);
-b=elementfinder(rhsuph,0);
-rhenth(b(:,1),1)=XSteam('hV_p',rhp(rhsuph==0));
+sups=rhent1>XSteam('sV_p',rhp);  %They are checked for superheated, saturated, wet states
+sat=rhent1-XSteam('sV_p',rhp);
+wet=rhent1<XSteam('sV_p',rhp);
+awet=elementfinder(wet,1);
+asat=elementfinder(sat,1);
+asup=elementfinder(sups,1);      %Corresponding states enthalpies are calculated using suitable XSteam
+x=(rhent1(wet==1)-XSteam('sL_p',rhp(wet==1)))./(XSteam('sV_p',rhp(wet==1))-XSteam('sL_p',rhp(wet==1)));
+rhdry(awet(:,1),1)=x(:,1);
+rhdry(asat(:,1))=1;
+rhdry(asup(:,1),1)=NaN;
+rhenth(awet(:,1),1)=XSteam('hL_p',rhp(wet==1))+x.*(XSteam('hV_p',rhp(wet==1))-XSteam('hL_p',rhp(wet==1)));
+rhenth(asat(:,1),1)=XSteam('hV_p',rhp(asat(:,1)));
+rhenth(asup(:,1),1)=XSteam('h_ps',rhp(asup(:,1),1),rhent1(asup(:,1),1));
 rhenth(:,2)=XSteam('h_pT',rhp,rht(:,2));
-rhent=XSteam('s_pT',rhp(nrh-1,1),rht(nrh-1,2));
-
-
+rh{1,1}='TEMPERATURE';
+rh{1,2}='ENTHALPY';
+rh{1,3}='ENTROPY';
+rh{2,1}=rht;
+rh{2,2}=rhenth;
+rh{2,3}=rhent;

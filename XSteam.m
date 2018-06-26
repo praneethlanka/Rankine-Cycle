@@ -358,7 +358,7 @@ case 'p_hs'
     %*1.4 Enthalpy (h)
 case 'hv_p'
     p = toSIunit_p(In1);
-    if p > 0.000611657 && p < 22.06395 
+    if p > 0.000611657 & p < 22.06395 
         Out = fromSIunit_h(h4V_p(p));
     else
         Out = NaN;
@@ -1878,7 +1878,7 @@ case 1
     Sigma = s / 2;
     teta = 0;
     for i = 1 : 46
-        teta = teta + ni(i) * Pi ^ Ii(i) * (Sigma - 2) ^ Ji(i);
+        teta = teta + ni(i).* Pi.^ Ii(i).* (Sigma - 2).^ Ji(i);
     end
     T2_ps = teta;
 case 2
@@ -2716,8 +2716,8 @@ end
 gammar = 0;
 gammar_tau = 0;
 for i = 1 : 5
-    gammar = gammar + nir(i) * Pi ^ Iir(i) * tau ^ Jir(i);
-    gammar_tau = gammar_tau + nir(i) * Pi ^ Iir(i) * Jir(i) * tau ^ (Jir(i) - 1);
+    gammar = gammar + nir(i).* Pi.^ Iir(i).* tau.^ Jir(i);
+    gammar_tau = gammar_tau + nir(i).* Pi.^Iir(i).* Jir(i).* tau.^ (Jir(i) - 1);
 end
 s5_pT = R * (tau * (gamma0_tau + gammar_tau) - (gamma0 + gammar));
 
@@ -2951,7 +2951,7 @@ region_ph = 0;
 %***********************************************************************************************************
 %*3.3 Regions as a function of ps
 function region_ps = region_ps(  p,   s)
-if p < 0.000611657 || p > 100 || s < 0 || s > s5_pT(p, 2273.15) 
+if p < 0.000611657 | p > 100 | s < 0 | s > s5_pT(p, 2273.15) 
     region_ps = 0;
     return
 end
