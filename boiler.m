@@ -3,13 +3,15 @@ boil=cell(2,3);
 boil{1,1}='TEMPERATURE';
 boil{1,2}='ENTHALPY';
 boil{1,3}='ENTROPY';
-boil{2,1}(:,1)=input('Boiler is operating between what temperatures');
-boil{2,3}(1,1)=XSteam('s_pT',rankp(2,1),boil{2,1}(1,1));
-boil{2,3}(1,2)=XSteam('s_pT',rankp(2,1),boil{2,1}(1,2));
-if abs(boil{2,1}(1,2)-XSteam('Tsat_p',rankp(2,1)))<0.2
-    boil{2,1}(1,2)=XSteam('Tsat_p',rankp(2,1));
-    boil{2,2}(1,2)=XSteam('hV_p',rankp(2,1));
-end
-if boil{2,3}(1,2)>XSteam('sV_p',rankp(2,1))
-    boil{2,2}(1,2)=XSteam('h_pT',rankp(2,1),boil{2,1}(2,1));
-end
+boil{2,1}=xlsread('rankinecycle.xlsx','Boiler Temperatures');
+boil{2,3}(:,1)=XSteam('sL_p',rankp(:,1));
+boil{2,2}(:,1)=XSteam('h_ps',rankp(:,2),boil{2,3}(:,1));
+a=abs(boil{2,1}(:,2)-XSteam('Tsat_p',rankp(:,2)))<0.2;
+[ela,~]=elementfinder(a,1); % Finds Saturated Points in matrix a corresponding to boil{2,1}(:,2)
+boil{2,1}(ela(:,1),2)=XSteam('Tsat_p',rankp(ela(:,1),2));
+boil{2,2}(ela(:,1),2)=XSteam('hV_p',rankp(ela(:,1),2));
+boil{2,3}(ela(:,1),2)=XSteam('sV_p',rankp(ela(:,1),2));
+b=XSteam('s_pT',rankp(:,2),boil{2,1}(:,2))>XSteam('sV_p',rankp(:,2));
+[elb,~]=elementfinder(b,1);% Finds Superheated Points in matrix a corresponding to boil{2,1}(:,2)
+boil{2,2}(elb(:,1),2)=XSteam('h_pT',rankp(elb(:,1),2),boil{2,1}(elb(:,1),2));
+boil{2,3}(elb(:,1),2)=XSteam('s_pT',rankp(elb(:,1),2),boil{2,1}(elb(:,1),2));
