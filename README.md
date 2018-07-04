@@ -1,6 +1,6 @@
 # Rankine-Cycle
 Thanks To XSteam. I was able to calculate the various thermodynamic properties at different points seamlessly
-The input to the code are taken from 'rankinecycle.xlsx'. In this Excel Sheet there are various tabs in which the input has to be entered column wise. Note that data entered in a row of a tab corresponds to the data entered in the same row number of another different tab. Care has to be taken while entering the data.
+The input to the code are taken from 'rankinecycle.xlsx'. In this Excel Sheet there are various tabs in which the input has to be entered rowwise. Note that data entered in a row of a tab corresponds to the data entered in the same row number of another different tab. Care has to be taken while entering the data.
 
 Data entry must be done very carefully. Data entered in Row 1 of each Tab Corresponds to one cycle, similarly Row 2 and so on.
 
