@@ -1,25 +1,21 @@
-function cond=condensor(rankp,a,boil,rh)
+function [cond,x]=condensor(rankp,boil,rh,nrh)
 cond=cell(2,3);
 cond{1,1}='TEMPERATURE';
 cond{1,2}='ENTHALPY';
 cond{1,3}='ENTROPY';
-cond{2,1}=XSteam('Tsat_p',input('Condensor operating at?'));
-cond{2,2}(1,1)=XSteam('hL_p',rankp(1,1));
-cond{2,3}{1,1}=XSteam('sL_p',rankp(1,1));
-if a==1 || a==3
-    cond{2,3}(1,2)=rh{2,3}(1,2);
+cond{2,1}=XSteam('Tsat_p',rankp(:,1));
+cond{2,2}(:,1)=XSteam('hL_p',rankp(:,1));
+cond{2,3}(:,1)=XSteam('sL_p',rankp(:,1));
+for i=1:size(nrh,1)
+    if nrh(i)~=0
+        cond{2,3}(i,2)=rh{2,3}(i,2*nrh(i));
+    end
+    if nrh(i)==0
+        cond{2,3}(i,2)=boil{2,3}(i,2);
+    end
 end
-if a==4||a==2
-    cond{2,3}(1,2)=boil{2,3}(1,2);
-end
-    if cond{2,3}(1,2)<XSteam('sV_p',rankp(1,1))
-        x=(cond{2,3}(1,2)-XSteam('sL_p',rankp(1,1)))/(XSteam('sV_p',rankp(1,1))-XSteam('sL_p',rankp(1,1)));
-        cond{2,2}(1,2)=XSteam('hL_p',rankp(1,1))+(x*(XSteam('hV_p',rankp(1,1))-XSteam('hL_p',rankp(1,1))));
-    end
-    if cond{2,3}(1,2)==XSteam('sV_p',rankp(1,1))
-        cond{2,2}(1,2)=XSteam('hV_p',rankp(1,1));
-    end
-    if cond{2,3}(1,2)>XSteam('sV_p',rankp(1,1))
-        cond{2,2}(1,2)=XSteam('h_ps',rankp(1,1),cond{2,3}(1,2));
-    end
-   
+%Cannot perform binary operations on cells, therfore had to convert cells
+%to matrices
+x=(cond{2,3}(:,2)-XSteam('sL_p',rankp(:,1)))./(XSteam('sV_p',rankp(:,1))-XSteam('sL_p',rankp(:,1)));
+cond{2,2}(:,2)=XSteam('h_ps',rankp(:,1),cond{2,3}(:,2));
+

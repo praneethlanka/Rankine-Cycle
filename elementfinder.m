@@ -1,5 +1,4 @@
 function [k,flag]=elementfinder(a,b)
-tic
 [l,m]=size(a);
 flag=0;
 i=0;
@@ -17,5 +16,5 @@ end
 if flag<5
     k(flag+1:5,:)=[];
 end
-toc;
+
 
